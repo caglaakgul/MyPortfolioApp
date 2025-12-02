@@ -6,8 +6,9 @@ import com.caglaakgul.myportfolioapp.domain.model.Project
 import com.caglaakgul.myportfolioapp.domain.repository.ProjectRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class ProjectRepositoryImpl(
+class ProjectRepositoryImpl @Inject constructor(
     private val api: ProjectApi
 ) : ProjectRepository {
 
