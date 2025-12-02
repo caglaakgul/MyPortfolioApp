@@ -16,10 +16,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyPortfolioAppTheme {
-                MyPortfolioAppTheme {
-                    val navController = rememberNavController()
-                    MyPortfolioNavHost(navController = navController)
-                }
+                val navController = rememberNavController()
+                MyPortfolioNavHost(navController = navController)
             }
         }
     }
