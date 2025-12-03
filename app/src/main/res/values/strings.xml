@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">My Portfolio App</string>
+
+    <string name="home_projects_description">See the apps I’ve built and shipped.</string>
+    <string name="home_experience_description">Explore my professional journey.</string>
+    <string name="home_techstack_description">Tools &amp; technologies I use day to day.</string>
+    <string name="home_education_description">Where I studied and what I focused on.</string>
+    <string name="home_about_description">Who I am beyond my job title.</string>
+
+    <string name="projects_title">Projects</string>
+    <string name="experience_title">Experience</string>
+    <string name="techstack_title">Tech Stack</string>
+    <string name="education_title">Education</string>
+    <string name="about_title">About Me</string>
+
+    <string name="home_title">What would you like to know about me?</string>
+    <string name="home_description">Choose a topic to explore my work, journey and skills.</string>
+
 </resources>
