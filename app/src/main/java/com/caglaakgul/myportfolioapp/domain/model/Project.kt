@@ -7,5 +7,6 @@ data class Project(
     val techStack: List<String>,
     val imageUrl: String? = null,
     val playStoreUrl: String? = null,
-    val githubUrl: String? = null
+    val githubUrl: String? = null,
+    val category: ProjectCategory
 )
