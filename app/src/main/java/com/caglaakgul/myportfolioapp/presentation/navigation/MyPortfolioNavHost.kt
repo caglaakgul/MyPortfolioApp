@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.caglaakgul.myportfolioapp.presentation.about.AboutScreen
 import com.caglaakgul.myportfolioapp.presentation.home.HomeScreen
 import com.caglaakgul.myportfolioapp.presentation.intro.IntroScreen
 import com.caglaakgul.myportfolioapp.presentation.projects.ProjectsScreen
@@ -50,6 +51,8 @@ fun MyPortfolioNavHost(
 
         composable(NavDestination.ProjectDetail.route) {}
 
-        composable(NavDestination.About.route) {}
+        composable(NavDestination.About.route) {
+            AboutScreen()
+        }
     }
 }

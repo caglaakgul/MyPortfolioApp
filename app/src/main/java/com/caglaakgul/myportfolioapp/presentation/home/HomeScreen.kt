@@ -1,10 +1,5 @@
 package com.caglaakgul.myportfolioapp.presentation.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,11 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -37,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.caglaakgul.myportfolioapp.R
+import com.caglaakgul.myportfolioapp.presentation.components.ScreenHeader
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 
 @Composable
@@ -84,36 +75,15 @@ fun HomeScreen(
 
 @Composable
 private fun HomeHeader() {
-    var visible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) { visible = true }
-
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(tween(600)) + slideInVertically(
-            tween(600, easing = FastOutSlowInEasing)
-        ) { full -> full / 4 }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 48.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.home_title),
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = Color.White
-            )
-            Text(
-                text = stringResource(id = R.string.home_description),
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White.copy(alpha = 0.85f)
-            )
-        }
-    }
+    ScreenHeader(
+        title = stringResource(id = R.string.home_title),
+        subtitle = stringResource(id = R.string.home_description),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 48.dp),
+        titleColor = Color.White,
+        subtitleColor = Color.White.copy(alpha = 0.85f)
+    )
 }
 
 @Composable

@@ -1,10 +1,5 @@
 package com.caglaakgul.myportfolioapp.presentation.projects
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,8 +42,10 @@ import com.caglaakgul.myportfolioapp.domain.model.Project
 import com.caglaakgul.myportfolioapp.domain.model.ProjectCategory
 import com.caglaakgul.myportfolioapp.presentation.components.FilterChip
 import com.caglaakgul.myportfolioapp.presentation.components.PrimaryButton
+import com.caglaakgul.myportfolioapp.presentation.components.ScreenHeader
 import com.caglaakgul.myportfolioapp.presentation.home.HomeUiState
 import com.caglaakgul.myportfolioapp.presentation.home.HomeViewModel
+import com.caglaakgul.myportfolioapp.presentation.ui.theme.Gray700
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 
 @Composable
@@ -87,7 +83,10 @@ private fun ProjectsContent(
                 .padding(WindowInsets.safeDrawing.asPaddingValues())
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
-            ProjectsHeader()
+            ScreenHeader(
+                title = "Projects",
+                subtitle = "Apps I’ve built, shipped, maintained and grown."
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -121,38 +120,6 @@ private fun ProjectsContent(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun ProjectsHeader() {
-    var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { visible = true }
-
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(tween(600)) + slideInVertically(
-            tween(600, easing = FastOutSlowInEasing)
-        ) { full -> full / 3 }
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(0.96f),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(
-                text = "Projects",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = Color(0xFF1F2933)
-            )
-
-            Text(
-                text = "Apps I’ve built, shipped, maintained and grown.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF4B5563)
-            )
         }
     }
 }
@@ -291,7 +258,7 @@ private fun ProjectCard(
             Text(
                 text = project.description,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF374151)
+                color = Gray700
             )
             Text(
                 text = project.techStack.joinToString(", "),

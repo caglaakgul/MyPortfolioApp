@@ -11,9 +11,26 @@
     <string name="experience_title">Experience</string>
     <string name="techstack_title">Tech Stack</string>
     <string name="education_title">Education</string>
-    <string name="about_title">About Me</string>
 
     <string name="home_title">What would you like to know about me?</string>
     <string name="home_description">Choose a topic to explore my work, journey and skills.</string>
+
+    <string name="about_title">About Me</string>
+    <string name="about_subtitle">
+        Who I am as an Android Developer and how I like to build products.
+    </string>
+    <string name="about_intro_line1">
+        Experienced Android Developer with 5+ years building scalable, user-centric apps.
+        I love working with Kotlin, Jetpack Compose, Clean Architecture and offline-first design.
+    </string>
+    <string name="about_intro_line2">
+        I’ve shipped multiple apps to Google Play and enjoy owning features end-to-end –
+        from architecture decisions to final polish.
+    </string>
+    <string name="about_quick_facts">Quick facts</string>
+    <string name="about_fact_location_label">Location</string>
+    <string name="about_fact_location_value">Istanbul &amp; Ankara, Turkey (open to relocation)</string>
+    <string name="about_fact_experience_value">5+ years in Android development</string>
+    <string name="about_fact_focus_label">Focus</string>
 
 </resources>
