@@ -1,13 +1,18 @@
 package com.caglaakgul.myportfolioapp.presentation.projects
 
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,26 +22,35 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.caglaakgul.myportfolioapp.domain.model.Project
+import com.caglaakgul.myportfolioapp.domain.model.ProjectCategory
+import com.caglaakgul.myportfolioapp.presentation.components.FilterChip
+import com.caglaakgul.myportfolioapp.presentation.components.PrimaryButton
 import com.caglaakgul.myportfolioapp.presentation.home.HomeUiState
 import com.caglaakgul.myportfolioapp.presentation.home.HomeViewModel
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
-
 
 @Composable
 fun ProjectsScreen(
@@ -44,9 +58,12 @@ fun ProjectsScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var selectedFilter by remember { mutableStateOf(ProjectFilter.ALL) }
 
     ProjectsContent(
         uiState = uiState,
+        selectedFilter = selectedFilter,
+        onFilterChange = { selectedFilter = it },
         onProjectClick = onProjectClick,
         onRetryClick = { viewModel.loadProjects() }
     )
@@ -55,62 +72,159 @@ fun ProjectsScreen(
 @Composable
 private fun ProjectsContent(
     uiState: HomeUiState,
+    selectedFilter: ProjectFilter,
+    onFilterChange: (ProjectFilter) -> Unit,
     onProjectClick: (String) -> Unit,
     onRetryClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(WindowInsets.safeDrawing.asPaddingValues())
-            .padding(horizontal = 24.dp, vertical = 16.dp)
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color.White
     ) {
-        Text(
-            text = "Projects",
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(WindowInsets.safeDrawing.asPaddingValues())
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+        ) {
+            ProjectsHeader()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ProjectsFilterRow(
+                selectedFilter = selectedFilter,
+                onFilterChange = onFilterChange
             )
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        when (uiState) {
-            is HomeUiState.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
+            when (uiState) {
+                is HomeUiState.Loading -> LoadingState()
+                is HomeUiState.Error -> ErrorState(uiState.message, onRetryClick)
+                is HomeUiState.Success -> {
+                    val filtered = uiState.projects.filter { project ->
+                        when (selectedFilter) {
+                            ProjectFilter.ALL -> true
+                            ProjectFilter.PERSONAL ->
+                                project.category == ProjectCategory.PERSONAL
 
-            is HomeUiState.Error -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(text = "Failed to load projects.")
-                        Text(
-                            text = uiState.message,
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                        Button(onClick = onRetryClick) {
-                            Text("Retry")
+                            ProjectFilter.FREELANCE ->
+                                project.category == ProjectCategory.FREELANCE
+
+                            ProjectFilter.PROFESSIONAL ->
+                                project.category == ProjectCategory.PROFESSIONAL
                         }
                     }
+                    ProjectList(
+                        projects = filtered,
+                        onProjectClick = onProjectClick
+                    )
                 }
             }
+        }
+    }
+}
 
-            is HomeUiState.Success -> {
-                Spacer(modifier = Modifier.height(16.dp))
-                ProjectList(
-                    projects = uiState.projects,
-                    onProjectClick = onProjectClick
-                )
-            }
+@Composable
+private fun ProjectsHeader() {
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { visible = true }
+
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(tween(600)) + slideInVertically(
+            tween(600, easing = FastOutSlowInEasing)
+        ) { full -> full / 3 }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(0.96f),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = "Projects",
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                color = Color(0xFF1F2933)
+            )
+
+            Text(
+                text = "Apps I’ve built, shipped, maintained and grown.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF4B5563)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProjectsFilterRow(
+    selectedFilter: ProjectFilter,
+    onFilterChange: (ProjectFilter) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        FilterChip(
+            label = "All",
+            isSelected = selectedFilter == ProjectFilter.ALL,
+            onClick = { onFilterChange(ProjectFilter.ALL) }
+        )
+        FilterChip(
+            label = "Personal",
+            isSelected = selectedFilter == ProjectFilter.PERSONAL,
+            onClick = { onFilterChange(ProjectFilter.PERSONAL) }
+        )
+        FilterChip(
+            label = "Freelance",
+            isSelected = selectedFilter == ProjectFilter.FREELANCE,
+            onClick = { onFilterChange(ProjectFilter.FREELANCE) }
+        )
+        FilterChip(
+            label = "Professional",
+            isSelected = selectedFilter == ProjectFilter.PROFESSIONAL,
+            onClick = { onFilterChange(ProjectFilter.PROFESSIONAL) }
+        )
+    }
+}
+
+@Composable
+private fun LoadingState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun ErrorState(
+    message: String,
+    onRetryClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+            .padding(bottom = 136.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "Failed to load projects",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color(0xFF333333)
+            )
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF777777)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            PrimaryButton(text = "Retry", onClick = onRetryClick)
         }
     }
 }
@@ -124,11 +238,18 @@ private fun ProjectList(
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = WindowInsets.navigationBarsIgnoringVisibility
-            .add(WindowInsets(bottom = 16.dp))
             .asPaddingValues()
+            .let { insets ->
+                PaddingValues(
+                    top = 8.dp,
+                    bottom = 24.dp,
+                    start = 0.dp,
+                    end = 0.dp
+                )
+            }
     ) {
         items(projects) { project ->
-            ProjectItem(
+            ProjectCard(
                 project = project,
                 onClick = { onProjectClick(project.id) }
             )
@@ -137,59 +258,89 @@ private fun ProjectList(
 }
 
 @Composable
-private fun ProjectItem(
+private fun ProjectCard(
     project: Project,
     onClick: () -> Unit
 ) {
+    val introTop = MaterialTheme.colorScheme.primary.copy(alpha = 0.95f)
+    val introBottom = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f)
+    val gradientMid = lerp(introTop, introBottom, 0.4f)
+    val cardColor = lerp(gradientMid, Color.White, 0.8f)
+
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .fillMaxWidth(),
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(0.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = cardColor
+        )
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
                 text = project.name,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Color(0xFF111827)
             )
-            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = project.description,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF374151)
             )
-            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = project.techStack.joinToString(", "),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = Color(0xFF4B5563)
             )
         }
     }
 }
 
+private val sampleProjectsPreview = listOf(
+    Project(
+        id = "cocktailist",
+        name = "Cocktailist",
+        description = "Modern cocktail recipe app with offline support.",
+        techStack = listOf("Kotlin", "Compose", "Room", "Hilt", "Firebase"),
+        playStoreUrl = null,
+        githubUrl = null,
+        category = ProjectCategory.PERSONAL
+    ),
+    Project(
+        id = "ehliyet",
+        name = "Ehliyet Sinav Uygulamasi",
+        description = "Driver’s license exam prep app with 2025 questions.",
+        techStack = listOf("Kotlin", "Clean Arch", "Hilt", "Room"),
+        playStoreUrl = null,
+        githubUrl = null,
+        category = ProjectCategory.FREELANCE
+    ),
+    Project(
+        id = "flight_market",
+        name = "Flight Market",
+        description = "Offline in-flight retail app for SunExpress crews.",
+        techStack = listOf("Kotlin", "Compose", "Room", "WorkManager"),
+        playStoreUrl = null,
+        githubUrl = null,
+        category = ProjectCategory.PROFESSIONAL
+    )
+)
+
 @Preview(showBackground = true)
 @Composable
 fun ProjectsSuccessPreview() {
-    val sampleProjects = listOf(
-        Project(
-            id = "cocktailist",
-            name = "Cocktailist",
-            description = "A modern cocktail recipe app.",
-            techStack = listOf("Kotlin", "MVVM", "Coroutines", "Room", "Hilt", "Firebase")
-        ),
-        Project(
-            id = "quickbite",
-            name = "QuickBite",
-            description = "Food recipe app with category filters and favorites.",
-            techStack = listOf("Kotlin", "MVVM", "Coroutines", "Firebase")
-        )
-    )
     MyPortfolioAppTheme {
+        var filter by remember { mutableStateOf(ProjectFilter.ALL) }
         ProjectsContent(
-            uiState = HomeUiState.Success(sampleProjects),
+            uiState = HomeUiState.Success(sampleProjectsPreview),
+            selectedFilter = filter,
+            onFilterChange = { filter = it },
             onProjectClick = {},
             onRetryClick = {}
         )
@@ -200,8 +351,11 @@ fun ProjectsSuccessPreview() {
 @Composable
 fun ProjectsLoadingPreview() {
     MyPortfolioAppTheme {
+        var filter by remember { mutableStateOf(ProjectFilter.ALL) }
         ProjectsContent(
             uiState = HomeUiState.Loading,
+            selectedFilter = filter,
+            onFilterChange = { filter = it },
             onProjectClick = {},
             onRetryClick = {}
         )
@@ -212,8 +366,11 @@ fun ProjectsLoadingPreview() {
 @Composable
 fun ProjectsErrorPreview() {
     MyPortfolioAppTheme {
+        var filter by remember { mutableStateOf(ProjectFilter.ALL) }
         ProjectsContent(
-            uiState = HomeUiState.Error("Something went wrong"),
+            uiState = HomeUiState.Error("Network error"),
+            selectedFilter = filter,
+            onFilterChange = { filter = it },
             onProjectClick = {},
             onRetryClick = {}
         )

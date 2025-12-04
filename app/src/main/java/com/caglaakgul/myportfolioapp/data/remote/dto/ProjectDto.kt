@@ -7,5 +7,6 @@ data class ProjectDto(
     val techStack: List<String>,
     val imageUrl: String?,
     val playStoreUrl: String?,
-    val githubUrl: String?
+    val githubUrl: String?,
+    val category: String
 )
