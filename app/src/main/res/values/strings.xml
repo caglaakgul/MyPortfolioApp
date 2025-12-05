@@ -33,4 +33,12 @@
     <string name="about_fact_experience_value">5+ years in Android development</string>
     <string name="about_fact_focus_label">Focus</string>
 
+    <string name="education_intro_primary">
+        I have a strong computer engineering background and also spent time studying abroad in Prague, which helped me improve both my technical and communication skills.
+    </string>
+
+    <string name="education_intro_secondary">
+        Below is a quick overview of my academic journey, including an MSc program I started but decided to discontinue after one semester.
+    </string>
+
 </resources>

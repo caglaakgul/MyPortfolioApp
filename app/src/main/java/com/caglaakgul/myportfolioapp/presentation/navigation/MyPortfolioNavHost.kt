@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.caglaakgul.myportfolioapp.presentation.about.AboutScreen
+import com.caglaakgul.myportfolioapp.presentation.education.EducationScreen
 import com.caglaakgul.myportfolioapp.presentation.experience.ExperienceScreen
 import com.caglaakgul.myportfolioapp.presentation.home.HomeScreen
 import com.caglaakgul.myportfolioapp.presentation.intro.IntroScreen
@@ -42,6 +43,9 @@ fun MyPortfolioNavHost(
                 onExperiencesClick = {
                     navController.navigate(NavDestination.Experiences.route)
                 },
+                onEducationClick = {
+                    navController.navigate(NavDestination.Education.route)
+                },
             )
         }
 
@@ -60,6 +64,10 @@ fun MyPortfolioNavHost(
         }
         composable(NavDestination.Experiences.route) {
             ExperienceScreen()
+        }
+
+        composable(NavDestination.Education.route) {
+            EducationScreen()
         }
     }
 }
