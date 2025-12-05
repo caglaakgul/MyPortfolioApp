@@ -8,5 +8,6 @@ data class Project(
     val imageUrl: String? = null,
     val playStoreUrl: String? = null,
     val githubUrl: String? = null,
-    val category: ProjectCategory
+    val category: ProjectCategory,
+    val company: String? = null
 )

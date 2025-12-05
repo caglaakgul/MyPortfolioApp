@@ -52,14 +52,8 @@ fun MyPortfolioNavHost(
             )
         }
         composable(NavDestination.Projects.route) {
-            ProjectsScreen(
-                onProjectClick = { id ->
-                    navController.navigate(NavDestination.ProjectDetail.createRoute(id))
-                }
-            )
+            ProjectsScreen()
         }
-        composable(NavDestination.ProjectDetail.route) {}
-
         composable(NavDestination.About.route) {
             AboutScreen()
         }

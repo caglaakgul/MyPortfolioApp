@@ -33,11 +33,21 @@ class FakeProjectApi : ProjectApi {
                 description = "Driver’s license exam app for Turkish learners.",
                 techStack = listOf("Kotlin", "Clean Architecture", "Hilt", "Room", "Coroutines"),
                 imageUrl = null,
-                playStoreUrl = "https://play.google.com/store/apps/details?id=com.caglaakgul.ehliyet",
+                playStoreUrl = "https://play.google.com/store/apps/details?id=com.doubletech.esinav&utm_source=emea_Med",
                 githubUrl = null,
-                category = "freelance"
+                category = "freelance",
+                company = "DoubleTech Studio"
             ),
-
+            ProjectDto(
+                id = "github_api_app",
+                name = "GitHub API App",
+                description = "GitHub user search and repository explorer built with XML + Jetpack Compose hybrid UI and MVVM architecture.",
+                techStack = listOf("Kotlin", "MVVM", "Retrofit", "Coroutines", "Glide", "Jetpack Compose"),
+                imageUrl = null,
+                playStoreUrl = null,
+                githubUrl = "https://github.com/caglaakgul/Android-Github-API-App---XML-and-Jetpack-Compose",
+                category = "personal"
+            ),
             ProjectDto(
                 id = "flight_market",
                 name = "Flight Market (SunExpress)",
@@ -46,7 +56,8 @@ class FakeProjectApi : ProjectApi {
                 imageUrl = null,
                 playStoreUrl = null,
                 githubUrl = null,
-                category = "professional"
+                category = "professional",
+                company = "Avsos-ID3"
             ),
             ProjectDto(
                 id = "rem_instore",
@@ -54,9 +65,10 @@ class FakeProjectApi : ProjectApi {
                 description = "Retail execution and auditing app for field teams.",
                 techStack = listOf("Kotlin", "MVVM", "Hilt", "Retrofit", "DataBinding"),
                 imageUrl = null,
-                playStoreUrl = "https://play.google.com/store/apps/details?id=com.rem.people",
+                playStoreUrl = "https://play.google.com/store/search?q=rem%20in%20store&c=apps&utm_source=emea_Med",
                 githubUrl = null,
-                category = "professional"
+                category = "professional",
+                company = "RemPeople"
             ),
             ProjectDto(
                 id = "ikon_hr",
@@ -64,9 +76,42 @@ class FakeProjectApi : ProjectApi {
                 description = "Internal HR app for employees at Enerjisa.",
                 techStack = listOf("Kotlin", "Coroutines", "Dagger2", "RxJava", "DataBinding"),
                 imageUrl = null,
-                playStoreUrl = null,
+                playStoreUrl = "https://play.google.com/store/apps/details?id=com.enerjisa.hraas&utm_source=emea_Med",
                 githubUrl = null,
-                category = "professional"
+                category = "professional",
+                company = "EnerjiSa"
+            ),
+            ProjectDto(
+                id = "enuygun",
+                name = "ENUYGUN",
+                description = "Flight, bus and hotel booking app used by millions of users.",
+                techStack = listOf("Kotlin", "Retrofit", "RecyclerView", "Android Jetpack"),
+                imageUrl = null,
+                playStoreUrl = "https://play.google.com/store/search?q=ENUYGUN&c=apps&utm_source=emea_Med",
+                githubUrl = null,
+                category = "professional",
+                company = "iPucu Bilisim"
+            ),
+
+            ProjectDto(
+                id = "talknative",
+                name = "TalkNative",
+                description = "Real-time translation chat app for multilingual texting using Yandex Translate API.",
+                techStack = listOf("Kotlin", "MVVM", "Dagger2", "RxJava", "Retrofit", "Glide"),
+                imageUrl = null,
+                playStoreUrl = null,
+                githubUrl = "https://github.com/caglaakgul/Talk-Native",
+                category = "personal"
+            ),
+            ProjectDto(
+                id = "book_donation",
+                name = "Book Donation Application",
+                description = "Android application for donating or requesting books, built with Java and MySQL backend.",
+                techStack = listOf("Java", "MySQL", "Retrofit", "RecyclerView", "Glide"),
+                imageUrl = null,
+                playStoreUrl = null,
+                githubUrl = "https://github.com/caglaakgul/AndroidBookApp",
+                category = "personal"
             )
         )
     }

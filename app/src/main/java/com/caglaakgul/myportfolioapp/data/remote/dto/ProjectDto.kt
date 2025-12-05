@@ -8,5 +8,6 @@ data class ProjectDto(
     val imageUrl: String?,
     val playStoreUrl: String?,
     val githubUrl: String?,
-    val category: String
+    val category: String,
+    val company: String? = null
 )
