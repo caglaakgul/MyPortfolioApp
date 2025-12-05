@@ -36,6 +36,7 @@ fun HomeScreen(
     onAboutClick: () -> Unit,
     onExperiencesClick: () -> Unit,
     onEducationClick: () -> Unit,
+    onTechStackClick: () -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -66,7 +67,7 @@ fun HomeScreen(
                 HomeSectionList(
                     onProjectsClick = onProjectsClick,
                     onExperienceClick = onExperiencesClick,
-                    onTechStackClick = { },
+                    onTechStackClick = onTechStackClick,
                     onEducationClick = onEducationClick,
                     onAboutClick = onAboutClick
                 )
@@ -171,7 +172,8 @@ fun HomeScreenPreview() {
             onProjectsClick = {},
             onAboutClick = {},
             onExperiencesClick = {},
-            onEducationClick = {}
+            onEducationClick = {},
+            onTechStackClick = {}
         )
     }
 }
