@@ -8,4 +8,5 @@ sealed class NavDestination(val route: String) {
         fun createRoute(projectId: String) = "project_detail/$projectId"
     }
     data object About : NavDestination("about")
+    data object Experiences : NavDestination("experiences")
 }

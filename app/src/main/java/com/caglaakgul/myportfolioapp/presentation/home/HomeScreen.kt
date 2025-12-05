@@ -34,6 +34,7 @@ import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 fun HomeScreen(
     onProjectsClick: () -> Unit,
     onAboutClick: () -> Unit,
+    onExperiencesClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -63,7 +64,7 @@ fun HomeScreen(
 
                 HomeSectionList(
                     onProjectsClick = onProjectsClick,
-                    onExperienceClick = { },
+                    onExperienceClick = onExperiencesClick,
                     onTechStackClick = { },
                     onEducationClick = {},
                     onAboutClick = onAboutClick
@@ -167,7 +168,8 @@ fun HomeScreenPreview() {
     MyPortfolioAppTheme {
         HomeScreen(
             onProjectsClick = {},
-            onAboutClick = {}
+            onAboutClick = {},
+            onExperiencesClick = {}
         )
     }
 }
