@@ -12,6 +12,7 @@ import com.caglaakgul.myportfolioapp.presentation.experience.ExperienceScreen
 import com.caglaakgul.myportfolioapp.presentation.home.HomeScreen
 import com.caglaakgul.myportfolioapp.presentation.intro.IntroScreen
 import com.caglaakgul.myportfolioapp.presentation.projects.ProjectsScreen
+import com.caglaakgul.myportfolioapp.presentation.skills.TechStackScreen
 
 @Composable
 fun MyPortfolioNavHost(
@@ -31,7 +32,6 @@ fun MyPortfolioNavHost(
                 }
             )
         }
-
         composable(NavDestination.Home.route) {
             HomeScreen(
                 onProjectsClick = {
@@ -46,9 +46,11 @@ fun MyPortfolioNavHost(
                 onEducationClick = {
                     navController.navigate(NavDestination.Education.route)
                 },
+                onTechStackClick = {
+                    navController.navigate(NavDestination.TechStack.route)
+                },
             )
         }
-
         composable(NavDestination.Projects.route) {
             ProjectsScreen(
                 onProjectClick = { id ->
@@ -56,7 +58,6 @@ fun MyPortfolioNavHost(
                 }
             )
         }
-
         composable(NavDestination.ProjectDetail.route) {}
 
         composable(NavDestination.About.route) {
@@ -65,9 +66,11 @@ fun MyPortfolioNavHost(
         composable(NavDestination.Experiences.route) {
             ExperienceScreen()
         }
-
         composable(NavDestination.Education.route) {
             EducationScreen()
+        }
+        composable(NavDestination.TechStack.route) {
+            TechStackScreen()
         }
     }
 }
