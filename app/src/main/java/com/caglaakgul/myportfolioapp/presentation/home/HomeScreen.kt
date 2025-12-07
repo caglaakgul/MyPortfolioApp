@@ -19,6 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -26,7 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.caglaakgul.myportfolioapp.R
+import com.caglaakgul.myportfolioapp.presentation.common.PortfolioViewModel
 import com.caglaakgul.myportfolioapp.presentation.components.ScreenHeader
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 
@@ -37,7 +41,10 @@ fun HomeScreen(
     onExperiencesClick: () -> Unit,
     onEducationClick: () -> Unit,
     onTechStackClick: () -> Unit,
+    viewModel: PortfolioViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.Transparent

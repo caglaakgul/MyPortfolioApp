@@ -1,8 +1,8 @@
 package com.caglaakgul.myportfolioapp.presentation.skills
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -20,18 +20,24 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults.cardColors
 import androidx.compose.material3.CardDefaults.cardElevation
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.caglaakgul.myportfolioapp.presentation.common.PortfolioUiState
+import com.caglaakgul.myportfolioapp.presentation.common.PortfolioViewModel
 import com.caglaakgul.myportfolioapp.presentation.components.FilterChip
 import com.caglaakgul.myportfolioapp.presentation.components.ScreenHeader
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.Gray600
@@ -40,28 +46,77 @@ import com.caglaakgul.myportfolioapp.presentation.ui.theme.Gray900
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 
 @Composable
-fun TechStackScreen() {
+fun TechStackScreen(
+    viewModel: PortfolioViewModel = hiltViewModel()
+) {
+    val state by viewModel.uiState.collectAsState()
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = androidx.compose.ui.graphics.Color.White
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(WindowInsets.safeDrawing.asPaddingValues())
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            ScreenHeader(
-                title = "Tech Stack",
-                subtitle = "The languages, tools and frameworks I use to design, build and ship Android apps."
-            )
+        when (state) {
+            is PortfolioUiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(WindowInsets.safeDrawing.asPaddingValues()),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            TechStackIntroSection()
-            Spacer(modifier = Modifier.height(24.dp))
-            TechStackContentSection()
+            is PortfolioUiState.Error -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(WindowInsets.safeDrawing.asPaddingValues()),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Failed to load tech stack",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Gray900
+                    )
+                }
+            }
+
+            is PortfolioUiState.Success -> {
+                val portfolio = (state as PortfolioUiState.Success).data
+                val categories = portfolio.techStack.map {
+                    TechStackUiModel(
+                        category = it.category,
+                        items = it.items
+                    )
+                }
+
+                TechStackContentScreen(techStackItems = categories)
+            }
         }
+    }
+}
+
+@Composable
+private fun TechStackContentScreen(
+    techStackItems: List<TechStackUiModel>
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(WindowInsets.safeDrawing.asPaddingValues())
+            .padding(horizontal = 24.dp, vertical = 16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        ScreenHeader(
+            title = "Tech Stack",
+            subtitle = "The languages, tools and frameworks I use to design, build and ship Android apps."
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        TechStackIntroSection()
+        Spacer(modifier = Modifier.height(24.dp))
+        TechStackContentSection(techStackItems)
     }
 }
 
@@ -86,7 +141,9 @@ private fun TechStackIntroSection() {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun TechStackContentSection() {
+private fun TechStackContentSection(
+    techStackItems: List<TechStackUiModel>
+) {
     if (techStackItems.isEmpty()) return
 
     var selectedCategory by remember { mutableStateOf(techStackItems.first().category) }
@@ -121,7 +178,6 @@ private fun TechStackContentSection() {
         }
     }
 }
-
 
 @Composable
 private fun TechStackCategoryCard(
@@ -162,6 +218,13 @@ private fun TechStackCategoryCard(
 @Composable
 fun TechStackScreenPreview() {
     MyPortfolioAppTheme {
-        TechStackScreen()
+        TechStackContentScreen(
+            techStackItems = listOf(
+                TechStackUiModel(
+                    category = "Programming Languages",
+                    items = listOf("Kotlin", "Java", "SQL")
+                )
+            )
+        )
     }
 }

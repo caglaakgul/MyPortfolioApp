@@ -46,20 +46,20 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.caglaakgul.myportfolioapp.domain.model.Project
 import com.caglaakgul.myportfolioapp.domain.model.ProjectCategory
+import com.caglaakgul.myportfolioapp.presentation.common.PortfolioUiState
+import com.caglaakgul.myportfolioapp.presentation.common.PortfolioViewModel
 import com.caglaakgul.myportfolioapp.presentation.components.FilterChip
 import com.caglaakgul.myportfolioapp.presentation.components.PrimaryButton
 import com.caglaakgul.myportfolioapp.presentation.components.ScreenHeader
-import com.caglaakgul.myportfolioapp.presentation.home.HomeUiState
-import com.caglaakgul.myportfolioapp.presentation.home.HomeViewModel
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.Gray700
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun ProjectsScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: PortfolioViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val state by viewModel.uiState.collectAsState()
     var selectedFilter by remember { mutableStateOf(ProjectFilter.ALL) }
 
     val uriHandler = LocalUriHandler.current
@@ -69,42 +69,60 @@ fun ProjectsScreen(
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
-        }
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { innerPadding ->
-        ProjectsContent(
-            uiState = uiState,
-            selectedFilter = selectedFilter,
-            onFilterChange = { selectedFilter = it },
-            onProjectClick = { project ->
-                when {
-                    !project.playStoreUrl.isNullOrBlank() -> {
-                        uriHandler.openUri(project.playStoreUrl)
-                    }
+        when (state) {
+            is PortfolioUiState.Loading -> {
+                ProjectsLoadingScaffold(modifier = Modifier.padding(innerPadding))
+            }
 
-                    !project.githubUrl.isNullOrBlank() -> {
-                        uriHandler.openUri(project.githubUrl)
-                    }
+            is PortfolioUiState.Error -> {
+                ProjectsErrorScaffold(
+                    message = (state as PortfolioUiState.Error).message,
+                    onRetryClick = { viewModel.refresh() },
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
 
-                    else -> {
-                        scope.launch {
-                            snackbarHostState.showSnackbar("No public link available")
+            is PortfolioUiState.Success -> {
+                val portfolio = (state as PortfolioUiState.Success).data
+                val projects = portfolio.projects
+
+                ProjectsContent(
+                    projects = projects,
+                    selectedFilter = selectedFilter,
+                    onFilterChange = { selectedFilter = it },
+                    onProjectClick = { project ->
+                        when {
+                            !project.playStoreUrl.isNullOrBlank() -> {
+                                uriHandler.openUri(project.playStoreUrl)
+                            }
+
+                            !project.githubUrl.isNullOrBlank() -> {
+                                uriHandler.openUri(project.githubUrl)
+                            }
+
+                            else -> {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("No public link available")
+                                }
+                            }
                         }
-                    }
-                }
-            },
-            onRetryClick = { viewModel.loadProjects() },
-            modifier = Modifier.padding(innerPadding)
-        )
+                    },
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun ProjectsContent(
-    uiState: HomeUiState,
+    projects: List<Project>,
     selectedFilter: ProjectFilter,
     onFilterChange: (ProjectFilter) -> Unit,
     onProjectClick: (Project) -> Unit,
-    onRetryClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -131,28 +149,80 @@ private fun ProjectsContent(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            when (uiState) {
-                is HomeUiState.Loading -> LoadingState()
-                is HomeUiState.Error -> ErrorState(uiState.message, onRetryClick)
-                is HomeUiState.Success -> {
-                    val filtered = uiState.projects.filter { project ->
-                        when (selectedFilter) {
-                            ProjectFilter.ALL -> true
-                            ProjectFilter.PERSONAL ->
-                                project.category == ProjectCategory.PERSONAL
+            val filtered = projects.filter { project ->
+                when (selectedFilter) {
+                    ProjectFilter.ALL -> true
+                    ProjectFilter.PERSONAL ->
+                        project.category == ProjectCategory.PERSONAL
 
-                            ProjectFilter.FREELANCE ->
-                                project.category == ProjectCategory.FREELANCE
+                    ProjectFilter.FREELANCE ->
+                        project.category == ProjectCategory.FREELANCE
 
-                            ProjectFilter.PROFESSIONAL ->
-                                project.category == ProjectCategory.PROFESSIONAL
-                        }
-                    }
-                    ProjectList(
-                        projects = filtered,
-                        onProjectClick = onProjectClick
-                    )
+                    ProjectFilter.PROFESSIONAL ->
+                        project.category == ProjectCategory.PROFESSIONAL
                 }
+            }
+
+            ProjectList(
+                projects = filtered,
+                onProjectClick = onProjectClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProjectsLoadingScaffold(
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = Color.White
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(WindowInsets.safeDrawing.asPaddingValues()),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+private fun ProjectsErrorScaffold(
+    message: String,
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = Color.White
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(WindowInsets.safeDrawing.asPaddingValues())
+                .padding(bottom = 136.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Failed to load projects",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color(0xFF333333)
+                )
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF777777)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                PrimaryButton(text = "Retry", onClick = onRetryClick)
             }
         }
     }
@@ -187,47 +257,6 @@ private fun ProjectsFilterRow(
             isSelected = selectedFilter == ProjectFilter.PROFESSIONAL,
             onClick = { onFilterChange(ProjectFilter.PROFESSIONAL) }
         )
-    }
-}
-
-@Composable
-private fun LoadingState() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-private fun ErrorState(
-    message: String,
-    onRetryClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 136.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = "Failed to load projects",
-                style = MaterialTheme.typography.titleMedium,
-                color = Color(0xFF333333)
-            )
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF777777)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            PrimaryButton(text = "Retry", onClick = onRetryClick)
-        }
     }
 }
 
@@ -354,11 +383,10 @@ fun ProjectsSuccessPreview() {
     MyPortfolioAppTheme {
         var filter by remember { mutableStateOf(ProjectFilter.ALL) }
         ProjectsContent(
-            uiState = HomeUiState.Success(sampleProjectsPreview),
+            projects = sampleProjectsPreview,
             selectedFilter = filter,
             onFilterChange = { filter = it },
-            onProjectClick = {},
-            onRetryClick = {},
+            onProjectClick = { },
             modifier = Modifier
         )
     }
@@ -368,13 +396,7 @@ fun ProjectsSuccessPreview() {
 @Composable
 fun ProjectsLoadingPreview() {
     MyPortfolioAppTheme {
-        var filter by remember { mutableStateOf(ProjectFilter.ALL) }
-        ProjectsContent(
-            uiState = HomeUiState.Loading,
-            selectedFilter = filter,
-            onFilterChange = { filter = it },
-            onProjectClick = {},
-            onRetryClick = {},
+        ProjectsLoadingScaffold(
             modifier = Modifier
         )
     }
@@ -384,13 +406,9 @@ fun ProjectsLoadingPreview() {
 @Composable
 fun ProjectsErrorPreview() {
     MyPortfolioAppTheme {
-        var filter by remember { mutableStateOf(ProjectFilter.ALL) }
-        ProjectsContent(
-            uiState = HomeUiState.Error("Network error"),
-            selectedFilter = filter,
-            onFilterChange = { filter = it },
-            onProjectClick = {},
-            onRetryClick = {},
+        ProjectsErrorScaffold(
+            message = "Network error",
+            onRetryClick = {  },
             modifier = Modifier
         )
     }

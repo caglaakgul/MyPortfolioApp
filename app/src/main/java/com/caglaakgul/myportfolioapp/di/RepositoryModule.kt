@@ -1,8 +1,9 @@
 package com.caglaakgul.myportfolioapp.di
 
-import com.caglaakgul.myportfolioapp.data.remote.ProjectApi
-import com.caglaakgul.myportfolioapp.data.repository.ProjectRepositoryImpl
-import com.caglaakgul.myportfolioapp.domain.repository.ProjectRepository
+import com.caglaakgul.myportfolioapp.data.local.dao.PortfolioDao
+import com.caglaakgul.myportfolioapp.data.remote.PortfolioApi
+import com.caglaakgul.myportfolioapp.data.repository.PortfolioRepositoryImpl
+import com.caglaakgul.myportfolioapp.domain.repository.PortfolioRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,9 +16,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideProjectRepository(
-        api: ProjectApi
-    ): ProjectRepository {
-        return ProjectRepositoryImpl(api)
+    fun providePortfolioRepository(
+        api: PortfolioApi,
+        dao: PortfolioDao,
+        token: String
+    ): PortfolioRepository {
+        return PortfolioRepositoryImpl(api, dao, token)
     }
 }

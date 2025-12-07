@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
@@ -16,21 +17,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.caglaakgul.myportfolioapp.R
+import com.caglaakgul.myportfolioapp.domain.model.About
+import com.caglaakgul.myportfolioapp.domain.model.Portfolio
+import com.caglaakgul.myportfolioapp.domain.model.TechStackCategory
+import com.caglaakgul.myportfolioapp.presentation.common.PortfolioUiState
+import com.caglaakgul.myportfolioapp.presentation.common.PortfolioViewModel
 import com.caglaakgul.myportfolioapp.presentation.components.FilterChip
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.Gray500
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.Gray600
@@ -40,30 +51,124 @@ import com.caglaakgul.myportfolioapp.presentation.ui.theme.Gray900
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 
 @Composable
-fun AboutScreen() {
+fun AboutScreen(
+    viewModel: PortfolioViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(WindowInsets.safeDrawing.asPaddingValues())
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-        ) {
-            AboutHeader()
-            Spacer(modifier = Modifier.height(16.dp))
-            AboutIntroSection()
-            Spacer(modifier = Modifier.height(24.dp))
-            AboutFactsSection()
-            Spacer(modifier = Modifier.height(24.dp))
-            SkillsSection()
+        when (uiState) {
+            is PortfolioUiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(WindowInsets.safeDrawing.asPaddingValues()),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            is PortfolioUiState.Error -> {
+                val error = uiState as PortfolioUiState.Error
+                AboutErrorState(
+                    message = error.message,
+                    onRetryClick = { viewModel.refresh() }
+                )
+            }
+
+            is PortfolioUiState.Success -> {
+                val portfolio = (uiState as PortfolioUiState.Success).data
+                val about = portfolio.about
+
+                // Core skills: techStack listesinden ilk birkaç item
+                val coreSkills = portfolio.techStack
+                    .flatMap { it.items }
+                    .distinct()
+                    .take(8)
+                    .ifEmpty {
+                        listOf(
+                            "Kotlin",
+                            "Jetpack Compose",
+                            "Offline-first",
+                            "Clean Architecture",
+                            "Coroutines",
+                            "Dagger Hilt",
+                            "Room",
+                            "Retrofit"
+                        )
+                    }
+
+                AboutContent(
+                    about = about,
+                    coreSkills = coreSkills
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun AboutHeader() {
+private fun AboutErrorState(
+    message: String,
+    onRetryClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(WindowInsets.safeDrawing.asPaddingValues()),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "Failed to load profile",
+                style = MaterialTheme.typography.titleMedium,
+                color = Gray900
+            )
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodySmall,
+                color = Gray600
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(onClick = onRetryClick) {
+                Text(text = "Retry")
+            }
+        }
+    }
+}
+
+@Composable
+private fun AboutContent(
+    about: About,
+    coreSkills: List<String>
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(WindowInsets.safeDrawing.asPaddingValues())
+            .padding(horizontal = 24.dp, vertical = 16.dp)
+    ) {
+        AboutHeader(headline = about.headline)
+        Spacer(modifier = Modifier.height(16.dp))
+        AboutIntroSection()
+        Spacer(modifier = Modifier.height(24.dp))
+        AboutFactsSection(about = about)
+        Spacer(modifier = Modifier.height(24.dp))
+        SkillsSection(coreSkills = coreSkills)
+    }
+}
+
+@Composable
+private fun AboutHeader(
+    headline: String
+) {
     var visible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { visible = true }
 
@@ -85,7 +190,8 @@ private fun AboutHeader() {
                 color = Gray800
             )
             Text(
-                text = stringResource(id = R.string.about_subtitle),
+                text = if (headline.isNotBlank()) headline
+                else stringResource(id = R.string.about_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Gray600
             )
@@ -112,7 +218,9 @@ private fun AboutIntroSection() {
 }
 
 @Composable
-private fun AboutFactsSection() {
+private fun AboutFactsSection(
+    about: About
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -126,7 +234,7 @@ private fun AboutFactsSection() {
         Spacer(modifier = Modifier.height(2.dp))
         FactRow(
             label = stringResource(id = R.string.about_fact_location_label),
-            value = stringResource(id = R.string.about_fact_location_value)
+            value = about.location
         )
         FactRow(
             label = stringResource(id = R.string.experience_title),
@@ -162,7 +270,9 @@ private fun FactRow(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun SkillsSection() {
+private fun SkillsSection(
+    coreSkills: List<String>
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -180,16 +290,7 @@ private fun SkillsSection() {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            listOf(
-                "Kotlin",
-                "Jetpack Compose",
-                "Offline-first",
-                "Clean Architecture",
-                "Coroutines",
-                "Dagger Hilt",
-                "Room",
-                "Retrofit"
-            ).forEach { skill ->
+            coreSkills.forEach { skill ->
                 FilterChip(
                     label = skill,
                     isSelected = false,
@@ -204,6 +305,40 @@ private fun SkillsSection() {
 @Composable
 fun AboutScreenPreview() {
     MyPortfolioAppTheme {
-        AboutScreen()
+        val fakeAbout = About(
+            name = "Çağla Akgül",
+            title = "Android Developer",
+            location = "Istanbul, Turkey",
+            email = "cagla.akgul.dev@gmail.com",
+            phone = "",
+            headline = "Android Developer focused on offline-first, product-quality mobile apps.",
+            github = "https://github.com/caglaakgul",
+            linkedin = "https://linkedin.com/in/caglaakgul",
+            medium = "https://medium.com/@caglaakgul"
+        )
+
+        val fakeTechStack = listOf(
+            TechStackCategory(
+                category = "Programming Languages",
+                items = listOf("Kotlin", "Java", "SQL")
+            ),
+            TechStackCategory(
+                category = "Frameworks & Libraries",
+                items = listOf("Jetpack Compose", "Hilt", "Coroutines", "Room")
+            )
+        )
+
+        val fakePortfolio = Portfolio(
+            about = fakeAbout,
+            experiences = emptyList(),
+            education = emptyList(),
+            techStack = fakeTechStack,
+            projects = emptyList()
+        )
+
+        AboutContent(
+            about = fakePortfolio.about,
+            coreSkills = fakePortfolio.techStack.flatMap { it.items }.distinct().take(8)
+        )
     }
 }

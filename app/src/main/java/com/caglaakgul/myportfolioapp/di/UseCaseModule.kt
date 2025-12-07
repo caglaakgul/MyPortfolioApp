@@ -1,7 +1,8 @@
 package com.caglaakgul.myportfolioapp.di
 
-import com.caglaakgul.myportfolioapp.domain.repository.ProjectRepository
-import com.caglaakgul.myportfolioapp.domain.usecase.GetProjectsUseCase
+import com.caglaakgul.myportfolioapp.domain.repository.PortfolioRepository
+import com.caglaakgul.myportfolioapp.domain.usecase.GetPortfolioUseCase
+import com.caglaakgul.myportfolioapp.domain.usecase.RefreshPortfolioUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,8 +15,13 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideGetProjectUseCase(projectRepository: ProjectRepository): GetProjectsUseCase{
-        return GetProjectsUseCase(projectRepository)
-    }
-}
+    fun provideGetPortfolioUseCase(
+        repository: PortfolioRepository
+    ): GetPortfolioUseCase = GetPortfolioUseCase(repository)
 
+    @Provides
+    @Singleton
+    fun provideRefreshPortfolioUseCase(
+        repository: PortfolioRepository
+    ): RefreshPortfolioUseCase = RefreshPortfolioUseCase(repository)
+}

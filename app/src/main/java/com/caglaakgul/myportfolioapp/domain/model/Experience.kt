@@ -1,6 +1,6 @@
-package com.caglaakgul.myportfolioapp.presentation.experience
+package com.caglaakgul.myportfolioapp.domain.model
 
-data class ExperienceUiModel(
+data class Experience(
     val company: String,
     val role: String,
     val location: String,
