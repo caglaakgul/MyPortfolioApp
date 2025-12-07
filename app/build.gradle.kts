@@ -35,11 +35,21 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    defaultConfig {
+        val baseUrl = project.findProperty("PORTFOLIO_BASE_URL") as String
+        val token = project.findProperty("GITHUB_API_TOKEN") as String
+
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
+        buildConfigField("String", "GITHUB_TOKEN", "\"$token\"")
+    }
     kotlinOptions {
         jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -89,10 +99,10 @@ dependencies {
     implementation("io.github.isharipov:gson-adapters:0.1")
 
     // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    androidTestImplementation("androidx.room:room-testing:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.4")
+    kapt("androidx.room:room-compiler:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+    androidTestImplementation("androidx.room:room-testing:2.8.4")
 
     // Coil
     implementation("io.coil-kt:coil:2.2.2")
