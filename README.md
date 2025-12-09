@@ -1,3 +1,5 @@
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 # MyPortfolioApp
 
 MyPortfolioApp is a modern Android portfolio application built with **Jetpack Compose** and **Clean Architecture**.  
@@ -42,3 +44,9 @@ This app acts as a *personal interactive CV* — ideal for recruiters, companies
 </p>
 
 
+## How to Run
+
+1. Clone this project or just download the zip file.
+2. Open the project in Android Studio.
+3. Install the necessary dependencies.
+4. Run the project on an emulator or real device.
