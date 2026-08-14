@@ -40,10 +40,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.caglaakgul.myportfolioapp.R
 import com.caglaakgul.myportfolioapp.domain.model.Project
 import com.caglaakgul.myportfolioapp.domain.model.ProjectCategory
 import com.caglaakgul.myportfolioapp.presentation.common.PortfolioUiState
@@ -65,6 +68,7 @@ fun ProjectsScreen(
     val uriHandler = LocalUriHandler.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val noPublicLinkMessage = stringResource(id = R.string.projects_no_public_link)
 
     Scaffold(
         snackbarHost = {
@@ -105,7 +109,7 @@ fun ProjectsScreen(
 
                             else -> {
                                 scope.launch {
-                                    snackbarHostState.showSnackbar("No public link available")
+                                    snackbarHostState.showSnackbar(noPublicLinkMessage)
                                 }
                             }
                         }
@@ -136,8 +140,8 @@ private fun ProjectsContent(
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             ScreenHeader(
-                title = "Projects",
-                subtitle = "Apps I’ve built, shipped, maintained and grown."
+                title = stringResource(id = R.string.projects_title),
+                subtitle = stringResource(id = R.string.projects_subtitle)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -212,7 +216,7 @@ private fun ProjectsErrorScaffold(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "Failed to load projects",
+                    text = stringResource(id = R.string.projects_error_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = Color(0xFF333333)
                 )
@@ -222,7 +226,10 @@ private fun ProjectsErrorScaffold(
                     color = Color(0xFF777777)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                PrimaryButton(text = "Retry", onClick = onRetryClick)
+                PrimaryButton(
+                    text = stringResource(id = R.string.retry),
+                    onClick = onRetryClick
+                )
             }
         }
     }
@@ -238,22 +245,22 @@ private fun ProjectsFilterRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         FilterChip(
-            label = "All",
+            label = stringResource(id = R.string.project_filter_all),
             isSelected = selectedFilter == ProjectFilter.ALL,
             onClick = { onFilterChange(ProjectFilter.ALL) }
         )
         FilterChip(
-            label = "Personal",
+            label = stringResource(id = R.string.project_filter_personal),
             isSelected = selectedFilter == ProjectFilter.PERSONAL,
             onClick = { onFilterChange(ProjectFilter.PERSONAL) }
         )
         FilterChip(
-            label = "Freelance",
+            label = stringResource(id = R.string.project_filter_freelance),
             isSelected = selectedFilter == ProjectFilter.FREELANCE,
             onClick = { onFilterChange(ProjectFilter.FREELANCE) }
         )
         FilterChip(
-            label = "Professional",
+            label = stringResource(id = R.string.project_filter_professional),
             isSelected = selectedFilter == ProjectFilter.PROFESSIONAL,
             onClick = { onFilterChange(ProjectFilter.PROFESSIONAL) }
         )
@@ -323,7 +330,7 @@ private fun ProjectCard(
 
                 project.company?.let {
                     Text(
-                        text = " •  $it",
+                        text = stringResource(id = R.string.project_company_format, it),
                         style = MaterialTheme.typography.bodySmall,
                         color = Gray700,
                         modifier = Modifier.padding(start = 4.dp)
@@ -346,36 +353,56 @@ private fun ProjectCard(
     }
 }
 
-private val sampleProjectsPreview = listOf(
-    Project(
-        id = "cocktailist",
-        name = "Cocktailist",
-        description = "Modern cocktail recipe app with offline support.",
-        techStack = listOf("Kotlin", "Compose", "Room", "Hilt", "Firebase"),
-        playStoreUrl = "https://play.google.com/store/apps/details?id=com.caglaakgul.cocktailist",
-        githubUrl = null,
-        category = ProjectCategory.PERSONAL
-    ),
-    Project(
-        id = "ehliyet",
-        name = "Ehliyet Sinav Uygulamasi",
-        description = "Driver’s license exam prep app with 2025 questions.",
-        techStack = listOf("Kotlin", "Clean Arch", "Hilt", "Room"),
-        playStoreUrl = null,
-        githubUrl = null,
-        category = ProjectCategory.FREELANCE
-    ),
-    Project(
-        id = "flight_market",
-        name = "Flight Market",
-        description = "Offline in-flight retail app for SunExpress crews.",
-        techStack = listOf("Kotlin", "Compose", "Room", "WorkManager"),
-        playStoreUrl = null,
-        githubUrl = null,
-        category = ProjectCategory.PROFESSIONAL,
-        company = "EnerjiSa"
+@Composable
+private fun sampleProjectsPreview(): List<Project> {
+    return listOf(
+        Project(
+            id = "ehliyet_ios",
+            name = stringResource(id = R.string.project_ehliyet_ios_name),
+            description = stringResource(id = R.string.project_ehliyet_ios_description),
+            techStack = stringArrayResource(id = R.array.project_ehliyet_ios_stack).toList(),
+            playStoreUrl = "https://apps.apple.com/us/app/ehliyet-s%C4%B1nav%C4%B1na-haz%C4%B1rl%C4%B1k-2026/id6779114318",
+            githubUrl = null,
+            category = ProjectCategory.PERSONAL
+        ),
+        Project(
+            id = "sleep_ios",
+            name = stringResource(id = R.string.project_sleep_name),
+            description = stringResource(id = R.string.project_sleep_description),
+            techStack = stringArrayResource(id = R.array.project_sleep_stack).toList(),
+            playStoreUrl = "https://apps.apple.com/us/app/03-17-stop-overthinking/id6760342606",
+            githubUrl = null,
+            category = ProjectCategory.PERSONAL
+        ),
+        Project(
+            id = "cocktailist",
+            name = stringResource(id = R.string.project_cocktailist_name),
+            description = stringResource(id = R.string.project_cocktailist_description),
+            techStack = stringArrayResource(id = R.array.project_cocktailist_stack).toList(),
+            playStoreUrl = "https://play.google.com/store/apps/details?id=com.caglaakgul.cocktailist&utm_source=emea_Med",
+            githubUrl = null,
+            category = ProjectCategory.PERSONAL
+        ),
+        Project(
+            id = "quickbite",
+            name = stringResource(id = R.string.project_quickbite_name),
+            description = stringResource(id = R.string.project_quickbite_description),
+            techStack = stringArrayResource(id = R.array.project_quickbite_stack).toList(),
+            playStoreUrl = "https://play.google.com/store/apps/details?id=com.caglaakgul.quickbite&utm_source=emea_Med",
+            githubUrl = null,
+            category = ProjectCategory.PERSONAL
+        ),
+        Project(
+            id = "talknative",
+            name = stringResource(id = R.string.project_talknative_name),
+            description = stringResource(id = R.string.project_talknative_description),
+            techStack = stringArrayResource(id = R.array.project_talknative_stack).toList(),
+            playStoreUrl = null,
+            githubUrl = "https://github.com/caglaakgul/Talk-Native",
+            category = ProjectCategory.PERSONAL
+        )
     )
-)
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -383,7 +410,7 @@ fun ProjectsSuccessPreview() {
     MyPortfolioAppTheme {
         var filter by remember { mutableStateOf(ProjectFilter.ALL) }
         ProjectsContent(
-            projects = sampleProjectsPreview,
+            projects = sampleProjectsPreview(),
             selectedFilter = filter,
             onFilterChange = { filter = it },
             onProjectClick = { },
@@ -407,7 +434,7 @@ fun ProjectsLoadingPreview() {
 fun ProjectsErrorPreview() {
     MyPortfolioAppTheme {
         ProjectsErrorScaffold(
-            message = "Network error",
+            message = stringResource(id = R.string.preview_network_error),
             onRetryClick = {  },
             modifier = Modifier
         )

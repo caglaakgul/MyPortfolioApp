@@ -77,7 +77,7 @@ fun EducationScreen(
                 ) {
                     ScreenHeader(
                         title = stringResource(R.string.education_title),
-                        subtitle = "Where I studied and the academic path that shaped my engineering mindset."
+                        subtitle = stringResource(R.string.education_subtitle)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     EducationIntroSection()
@@ -119,7 +119,7 @@ private fun EducationErrorState(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Failed to load education",
+                text = stringResource(id = R.string.education_error_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = Gray900
             )
@@ -130,7 +130,7 @@ private fun EducationErrorState(
             )
             Spacer(modifier = Modifier.height(12.dp))
             Button(onClick = onRetryClick) {
-                Text(text = "Retry")
+                Text(text = stringResource(id = R.string.retry))
             }
         }
     }
@@ -196,7 +196,11 @@ private fun EducationCard(
                 color = Gray800
             )
             Text(
-                text = "${item.location} • ${item.period}",
+                text = stringResource(
+                    id = R.string.location_period_format,
+                    item.location,
+                    item.period
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = Gray600
             )
@@ -219,18 +223,25 @@ fun EducationScreenPreview() {
     MyPortfolioAppTheme {
         val fakeEducation = listOf(
             Education(
-                school = "Czech University of Life Sciences Prague",
-                degree = "MSc - Informatics (Incomplete)",
-                location = "Prague, Czech Republic",
-                period = "Sep 2024 – Jan 2025",
-                summary = "Started the MSc Informatics program; discontinued after one semester."
+                school = stringResource(id = R.string.education_czu_school),
+                degree = stringResource(id = R.string.education_czu_degree),
+                location = stringResource(id = R.string.experience_prague),
+                period = stringResource(id = R.string.education_czu_period),
+                summary = stringResource(id = R.string.education_czu_summary)
             ),
             Education(
-                school = "Bilecik University",
-                degree = "BSc - Computer Engineering",
-                location = "Bilecik, Turkey",
-                period = "Sep 2016 – Jun 2020",
-                summary = "Learned core computer science fundamentals and focused on mobile development."
+                school = stringResource(id = R.string.education_vse_school),
+                degree = stringResource(id = R.string.education_vse_degree),
+                location = stringResource(id = R.string.experience_prague),
+                period = stringResource(id = R.string.education_vse_period),
+                summary = stringResource(id = R.string.education_vse_summary)
+            ),
+            Education(
+                school = stringResource(id = R.string.education_bilecik_school),
+                degree = stringResource(id = R.string.education_bilecik_degree),
+                location = stringResource(id = R.string.education_bilecik_location),
+                period = stringResource(id = R.string.education_bilecik_period),
+                summary = stringResource(id = R.string.education_bilecik_summary)
             )
         )
 
@@ -242,8 +253,8 @@ fun EducationScreenPreview() {
                     .verticalScroll(rememberScrollState())
             ) {
                 ScreenHeader(
-                    title = "Education",
-                    subtitle = "Where I studied and the academic path that shaped my engineering mindset."
+                    title = stringResource(id = R.string.education_title),
+                    subtitle = stringResource(id = R.string.education_subtitle)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 EducationIntroSection()

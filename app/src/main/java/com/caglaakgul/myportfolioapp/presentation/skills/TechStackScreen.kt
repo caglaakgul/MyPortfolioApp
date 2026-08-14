@@ -32,10 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.caglaakgul.myportfolioapp.R
 import com.caglaakgul.myportfolioapp.presentation.common.PortfolioUiState
 import com.caglaakgul.myportfolioapp.presentation.common.PortfolioViewModel
 import com.caglaakgul.myportfolioapp.presentation.components.FilterChip
@@ -75,7 +78,7 @@ fun TechStackScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Failed to load tech stack",
+                        text = stringResource(id = R.string.techstack_error_title),
                         style = MaterialTheme.typography.bodyMedium,
                         color = Gray900
                     )
@@ -109,8 +112,8 @@ private fun TechStackContentScreen(
             .verticalScroll(rememberScrollState())
     ) {
         ScreenHeader(
-            title = "Tech Stack",
-            subtitle = "The languages, tools and frameworks I use to design, build and ship Android apps."
+            title = stringResource(id = R.string.techstack_title),
+            subtitle = stringResource(id = R.string.techstack_subtitle)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -126,13 +129,12 @@ private fun TechStackIntroSection() {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = "I mainly work with Kotlin and modern Android tools like Jetpack Compose, Hilt and Coroutines. " +
-                    "I care a lot about clean architecture, testability and maintainable codebases.",
+            text = stringResource(id = R.string.techstack_intro_primary),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray900
         )
         Text(
-            text = "You can quickly explore what I use in production through the categories below.",
+            text = stringResource(id = R.string.techstack_intro_secondary),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray600
         )
@@ -205,7 +207,7 @@ private fun TechStackCategoryCard(
 
             category.items.forEach { tech ->
                 Text(
-                    text = "• $tech",
+                    text = stringResource(id = R.string.bullet_item_format, tech),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Gray800
                 )
@@ -221,8 +223,20 @@ fun TechStackScreenPreview() {
         TechStackContentScreen(
             techStackItems = listOf(
                 TechStackUiModel(
-                    category = "Programming Languages",
-                    items = listOf("Kotlin", "Java", "SQL")
+                    category = stringResource(id = R.string.category_programming_languages),
+                    items = stringArrayResource(id = R.array.preview_programming_language_items).toList()
+                ),
+                TechStackUiModel(
+                    category = stringResource(id = R.string.category_android),
+                    items = stringArrayResource(id = R.array.preview_android_items).toList()
+                ),
+                TechStackUiModel(
+                    category = stringResource(id = R.string.category_ios),
+                    items = stringArrayResource(id = R.array.preview_ios_items).toList()
+                ),
+                TechStackUiModel(
+                    category = stringResource(id = R.string.category_testing),
+                    items = stringArrayResource(id = R.array.preview_testing_items).toList()
                 )
             )
         )

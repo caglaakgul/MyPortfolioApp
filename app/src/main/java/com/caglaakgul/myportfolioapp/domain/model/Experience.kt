@@ -6,5 +6,6 @@ data class Experience(
     val location: String,
     val period: String,
     val summary: String,
-    val techStack: String
+    val techStack: String,
+    val projectUrl: String? = null
 )

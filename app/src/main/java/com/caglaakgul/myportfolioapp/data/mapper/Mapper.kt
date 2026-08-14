@@ -31,7 +31,8 @@ fun ExperienceLocal.toDomain(): Experience = Experience(
     location = location,
     period = period,
     summary = summary,
-    techStack = techStack
+    techStack = techStack,
+    projectUrl = projectUrl
 )
 
 fun EducationLocal.toDomain(): Education = Education(

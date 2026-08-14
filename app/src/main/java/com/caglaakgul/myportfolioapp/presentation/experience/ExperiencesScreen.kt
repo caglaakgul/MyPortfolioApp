@@ -1,5 +1,6 @@
 package com.caglaakgul.myportfolioapp.presentation.experience
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,10 +29,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.caglaakgul.myportfolioapp.R
 import com.caglaakgul.myportfolioapp.domain.model.Experience
 import com.caglaakgul.myportfolioapp.presentation.common.PortfolioUiState
 import com.caglaakgul.myportfolioapp.presentation.common.PortfolioViewModel
@@ -82,8 +86,8 @@ fun ExperienceScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     ScreenHeader(
-                        title = "Experiences",
-                        subtitle = "Where I’ve worked, what I built and what I owned as an Android Developer."
+                        title = stringResource(id = R.string.experience_title),
+                        subtitle = stringResource(id = R.string.experience_subtitle)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ExperienceIntroSection()
@@ -111,7 +115,7 @@ private fun ExperienceErrorState(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Failed to load experiences",
+                text = stringResource(id = R.string.experience_error_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = Gray900
             )
@@ -122,7 +126,7 @@ private fun ExperienceErrorState(
             )
             Spacer(modifier = Modifier.height(12.dp))
             Button(onClick = onRetryClick) {
-                Text(text = "Retry")
+                Text(text = stringResource(id = R.string.retry))
             }
         }
     }
@@ -134,13 +138,12 @@ private fun ExperienceIntroSection() {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = "I’ve been working as an Android Developer for 5+ years, mostly on product-focused " +
-                    "apps where clean architecture, offline-first design and performance matter.",
+            text = stringResource(id = R.string.experience_intro_primary),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray900
         )
         Text(
-            text = "Below is a quick overview of the teams I’ve worked with and what I was responsible for.",
+            text = stringResource(id = R.string.experience_intro_secondary),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray600
         )
@@ -164,8 +167,14 @@ private fun ExperienceListSection(
 private fun ExperienceCard(
     item: Experience
 ) {
+    val uriHandler = LocalUriHandler.current
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                enabled = !item.projectUrl.isNullOrBlank(),
+                onClick = { item.projectUrl?.let(uriHandler::openUri) }
+            ),
         shape = RoundedCornerShape(16.dp),
         colors = cardColors(
             containerColor = Color(0xFFF9FAFB)
@@ -189,7 +198,11 @@ private fun ExperienceCard(
                 color = Gray800
             )
             Text(
-                text = "${item.location} • ${item.period}",
+                text = stringResource(
+                    id = R.string.location_period_format,
+                    item.location,
+                    item.period
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = Gray600
             )
@@ -216,20 +229,29 @@ fun ExperienceScreenPreview() {
     MyPortfolioAppTheme {
         val fakeExperiences = listOf(
             Experience(
-                company = "Avsos via ID3 / SunExpress Flight Market",
-                role = "Android Developer",
-                location = "Istanbul, Turkey",
-                period = "Apr 2025 – Sep 2025",
-                summary = "Built an offline in-flight retail app running on Android POS devices using Jetpack Compose.",
-                techStack = "Kotlin • Jetpack Compose • Room • WorkManager • Hilt"
+                company = stringResource(id = R.string.experience_freelance_current_company),
+                role = stringResource(id = R.string.experience_freelance_current_role),
+                location = stringResource(id = R.string.experience_remote_istanbul),
+                period = stringResource(id = R.string.experience_freelance_current_period),
+                summary = stringResource(id = R.string.experience_freelance_current_summary),
+                techStack = stringResource(id = R.string.experience_freelance_current_stack)
             ),
             Experience(
-                company = "REM People",
-                role = "Android Developer",
-                location = "Istanbul, Turkey",
-                period = "Sep 2022 – Oct 2023",
-                summary = "Developed new features and refactored legacy Java code to Kotlin for Rem-inStore.",
-                techStack = "Kotlin • MVVM • Dagger-Hilt • Coroutines • Retrofit"
+                company = stringResource(id = R.string.experience_avsos_company),
+                role = stringResource(id = R.string.experience_android_developer_role),
+                location = stringResource(id = R.string.experience_istanbul),
+                period = stringResource(id = R.string.experience_avsos_period),
+                summary = stringResource(id = R.string.experience_avsos_summary),
+                techStack = stringResource(id = R.string.experience_avsos_stack)
+            ),
+            Experience(
+                company = stringResource(id = R.string.experience_doubletech_company),
+                role = stringResource(id = R.string.experience_freelance_current_company),
+                location = stringResource(id = R.string.experience_prague),
+                period = stringResource(id = R.string.experience_doubletech_period),
+                summary = stringResource(id = R.string.experience_doubletech_summary),
+                techStack = stringResource(id = R.string.experience_doubletech_stack),
+                projectUrl = "https://play.google.com/store/apps/details?id=com.doubletech.esinav&utm_source=emea_Med"
             )
         )
 
@@ -241,8 +263,8 @@ fun ExperienceScreenPreview() {
                     .verticalScroll(rememberScrollState())
             ) {
                 ScreenHeader(
-                    title = "Experiences",
-                    subtitle = "Where I’ve worked, what I built and what I owned as an Android Developer."
+                    title = stringResource(id = R.string.experience_title),
+                    subtitle = stringResource(id = R.string.experience_subtitle)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 ExperienceIntroSection()

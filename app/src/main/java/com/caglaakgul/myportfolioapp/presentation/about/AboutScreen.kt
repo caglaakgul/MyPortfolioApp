@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -90,16 +91,7 @@ fun AboutScreen(
                     .distinct()
                     .take(8)
                     .ifEmpty {
-                        listOf(
-                            "Kotlin",
-                            "Jetpack Compose",
-                            "Offline-first",
-                            "Clean Architecture",
-                            "Coroutines",
-                            "Dagger Hilt",
-                            "Room",
-                            "Retrofit"
-                        )
+                        stringArrayResource(id = R.array.about_core_skills_fallback).toList()
                     }
 
                 AboutContent(
@@ -127,7 +119,7 @@ private fun AboutErrorState(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Failed to load profile",
+                text = stringResource(id = R.string.about_error_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = Gray900
             )
@@ -138,7 +130,7 @@ private fun AboutErrorState(
             )
             Spacer(modifier = Modifier.height(12.dp))
             Button(onClick = onRetryClick) {
-                Text(text = "Retry")
+                Text(text = stringResource(id = R.string.retry))
             }
         }
     }
@@ -242,7 +234,7 @@ private fun AboutFactsSection(
         )
         FactRow(
             label = stringResource(id = R.string.about_fact_focus_label),
-            value = "Offline-first apps, clean architecture, product quality"
+            value = stringResource(id = R.string.about_fact_focus_value)
         )
     }
 }
@@ -277,7 +269,7 @@ private fun SkillsSection(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = "Core skills",
+            text = stringResource(id = R.string.about_core_skills),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
             ),
@@ -306,25 +298,25 @@ private fun SkillsSection(
 fun AboutScreenPreview() {
     MyPortfolioAppTheme {
         val fakeAbout = About(
-            name = "Çağla Akgül",
-            title = "Android Developer",
-            location = "Istanbul, Turkey",
-            email = "cagla.akgul.dev@gmail.com",
+            name = stringResource(id = R.string.preview_name),
+            title = stringResource(id = R.string.preview_title),
+            location = stringResource(id = R.string.preview_location),
+            email = stringResource(id = R.string.preview_email),
             phone = "",
-            headline = "Android Developer focused on offline-first, product-quality mobile apps.",
-            github = "https://github.com/caglaakgul",
-            linkedin = "https://linkedin.com/in/caglaakgul",
-            medium = "https://medium.com/@caglaakgul"
+            headline = stringResource(id = R.string.preview_headline),
+            github = stringResource(id = R.string.preview_github),
+            linkedin = stringResource(id = R.string.preview_linkedin),
+            medium = stringResource(id = R.string.preview_medium)
         )
 
         val fakeTechStack = listOf(
             TechStackCategory(
-                category = "Programming Languages",
-                items = listOf("Kotlin", "Java", "SQL")
+                category = stringResource(id = R.string.category_programming_languages),
+                items = stringArrayResource(id = R.array.preview_programming_language_items).toList()
             ),
             TechStackCategory(
-                category = "Frameworks & Libraries",
-                items = listOf("Jetpack Compose", "Hilt", "Coroutines", "Room")
+                category = stringResource(id = R.string.category_android),
+                items = stringArrayResource(id = R.array.preview_android_items).toList()
             )
         )
 

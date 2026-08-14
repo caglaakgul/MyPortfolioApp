@@ -20,8 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.caglaakgul.myportfolioapp.R
 import com.caglaakgul.myportfolioapp.presentation.components.PrimaryButton
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 
@@ -91,13 +94,13 @@ private fun IntroContent(
         ) {
             Column {
                 Text(
-                    text = "Hi, I’m Cagla",
+                    text = stringResource(id = R.string.intro_title),
                     style = MaterialTheme.typography.headlineLarge,
                     color = Color.White
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Android Developer • Computer Engineer",
+                    text = stringResource(id = R.string.intro_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.9f)
                 )
@@ -115,14 +118,14 @@ private fun IntroContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "This app is a live portfolio of my work.\nLet’s take a look inside.",
+                text = stringResource(id = R.string.intro_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.White.copy(alpha = 0.9f)
             )
             Spacer(modifier = Modifier.height(48.dp))
 
             PrimaryButton(
-                text = "View Portfolio",
+                text = stringResource(id = R.string.intro_button),
                 onClick = onFinished
             )
 
@@ -141,14 +144,7 @@ private fun SkillChipsRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        listOf(
-            "Kotlin",
-            "Jetpack Compose",
-            "Offline-first",
-            "MVVM",
-            "Dagger-Hilt",
-            "Coroutines"
-        ).forEach { label ->
+        stringArrayResource(id = R.array.intro_skill_chips).forEach { label ->
             SkillChip(label = label)
         }
     }

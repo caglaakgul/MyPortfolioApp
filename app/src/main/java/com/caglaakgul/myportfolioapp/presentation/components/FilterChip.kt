@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.caglaakgul.myportfolioapp.R
 import com.caglaakgul.myportfolioapp.presentation.ui.theme.MyPortfolioAppTheme
 
 @Composable
@@ -64,7 +66,7 @@ fun FilterChip(
 fun FilterChipUnselectedPreview() {
     MyPortfolioAppTheme {
         FilterChip(
-            label = "Personal",
+            label = stringResource(id = R.string.project_filter_personal),
             isSelected = false,
             onClick = {}
         )
@@ -76,7 +78,7 @@ fun FilterChipUnselectedPreview() {
 fun FilterChipSelectedPreview() {
     MyPortfolioAppTheme {
         FilterChip(
-            label = "Personal",
+            label = stringResource(id = R.string.project_filter_personal),
             isSelected = true,
             onClick = {}
         )

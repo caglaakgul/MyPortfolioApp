@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">My Portfolio App</string>
 
-    <string name="home_projects_description">See the apps I’ve built and shipped.</string>
-    <string name="home_experience_description">Explore my professional journey.</string>
-    <string name="home_techstack_description">Tools &amp; technologies I use day to day.</string>
+    <string name="home_projects_description">See the apps I’ve built, published and maintained.</string>
+    <string name="home_experience_description">Explore my professional Android journey.</string>
+    <string name="home_techstack_description">Tools &amp; technologies I use across Android and iOS.</string>
     <string name="home_education_description">Where I studied and what I focused on.</string>
     <string name="home_about_description">Who I am beyond my job title.</string>
 
     <string name="projects_title">Projects</string>
-    <string name="experience_title">Experience</string>
+    <string name="experience_title">Experiences</string>
     <string name="techstack_title">Tech Stack</string>
     <string name="education_title">Education</string>
 
@@ -16,29 +16,207 @@
     <string name="home_description">Choose a topic to explore my work, journey and skills.</string>
 
     <string name="about_title">About Me</string>
+    <string name="intro_title">Hi, I’m Çağla</string>
+    <string name="intro_subtitle">Senior Android Developer • Computer Engineer</string>
+    <string name="intro_description">This app is a live portfolio of my work.\nLet’s take a look inside.</string>
+    <string name="intro_button">View Portfolio</string>
+    <string-array name="intro_skill_chips">
+        <item>Kotlin</item>
+        <item>Jetpack Compose</item>
+        <item>Offline-first</item>
+        <item>SwiftUI</item>
+        <item>Hilt</item>
+        <item>Unit Testing</item>
+    </string-array>
+
     <string name="about_subtitle">
-        Who I am as an Android Developer and how I like to build products.
+        Who I am as a Senior Android Developer and how I like to build products.
     </string>
     <string name="about_intro_line1">
-        Experienced Android Developer with 5+ years building scalable, user-centric apps.
-        I love working with Kotlin, Jetpack Compose, Clean Architecture and offline-first design.
+        Senior Android Developer with 5+ years of professional experience building scalable, high-performance mobile applications. Kotlin is my primary programming language, with additional experience in Java.
     </string>
     <string name="about_intro_line2">
-        I’ve shipped multiple apps to Google Play and enjoy owning features end-to-end –
-        from architecture decisions to final polish.
+        Experienced in end-to-end Android development, complex business workflows, offline-first architectures, performance optimization, and modern Android technologies such as Jetpack Compose, Coroutines, and Hilt, with hands-on experience in Unit Testing. Alongside my Android expertise, I have also expanded into iOS development, with Swift-based applications published on the App Store.
     </string>
     <string name="about_quick_facts">Quick facts</string>
     <string name="about_fact_location_label">Location</string>
-    <string name="about_fact_location_value">Istanbul &amp; Ankara, Turkey (open to relocation)</string>
+    <string name="about_fact_location_value">Istanbul / Türkiye</string>
     <string name="about_fact_experience_value">5+ years in Android development</string>
     <string name="about_fact_focus_label">Focus</string>
+    <string name="about_fact_focus_value">Offline-first apps, complex business workflows, performance optimization</string>
+    <string name="about_core_skills">Core skills</string>
+    <string name="about_error_title">Failed to load profile</string>
+    <string name="retry">Retry</string>
+    <string name="location_period_format">%1$s • %2$s</string>
+    <string name="bullet_item_format">• %1$s</string>
+    <string name="project_company_format"> •  %1$s</string>
 
     <string name="education_intro_primary">
-        I have a strong computer engineering background and also spent time studying abroad in Prague, which helped me improve both my technical and communication skills.
+        I have a strong computer engineering background and spent time studying abroad in Prague, including English preparation and an Informatics master’s program.
     </string>
 
     <string name="education_intro_secondary">
-        Below is a quick overview of my academic journey, including an MSc program I started but decided to discontinue after one semester.
+        Below is a quick overview of my academic journey and the path that shaped my engineering mindset.
     </string>
+    <string name="education_subtitle">Where I studied and the academic path that shaped my engineering mindset.</string>
+    <string name="education_error_title">Failed to load education</string>
+
+    <string name="experience_subtitle">Where I’ve worked, what I built and what I owned as an Android Developer.</string>
+    <string name="experience_intro_primary">I’ve been working as an Android Developer for 5+ years, mostly on product-focused apps where scalable architecture, complex workflows, offline-first design and performance matter.</string>
+    <string name="experience_intro_secondary">Below is a quick overview of the teams I’ve worked with and what I was responsible for.</string>
+    <string name="experience_error_title">Failed to load experiences</string>
+
+    <string name="techstack_subtitle">The languages, tools and frameworks I use to design, build and ship mobile apps.</string>
+    <string name="techstack_intro_primary">I mainly work with Kotlin and modern Android tools like Jetpack Compose, Hilt and Coroutines, with additional SwiftUI experience on published iOS apps.</string>
+    <string name="techstack_intro_secondary">You can quickly explore what I use in production through the categories below.</string>
+    <string name="techstack_error_title">Failed to load tech stack</string>
+
+    <string name="projects_subtitle">Apps I’ve built, published, maintained and grown.</string>
+    <string name="projects_error_title">Failed to load projects</string>
+    <string name="projects_no_public_link">No public link available</string>
+    <string name="project_filter_all">All</string>
+    <string name="project_filter_personal">Personal</string>
+    <string name="project_filter_freelance">Freelance</string>
+    <string name="project_filter_professional">Professional</string>
+
+    <string name="preview_name">Çağla Akgül Gürgür</string>
+    <string name="preview_title">Senior Android Developer</string>
+    <string name="preview_location">Istanbul / Türkiye</string>
+    <string name="preview_email">ccaglaakgul@gmail.com</string>
+    <string name="preview_headline">Senior Android Developer focused on scalable, high-performance mobile applications.</string>
+    <string name="preview_github">https://github.com/caglaakgul</string>
+    <string name="preview_linkedin">https://linkedin.com/in/caglaakgul</string>
+    <string name="preview_medium">https://medium.com/@caglaakgul</string>
+
+    <string name="category_programming_languages">Programming Languages</string>
+    <string name="category_android">Android</string>
+    <string name="category_ios">iOS</string>
+    <string name="category_testing">Testing</string>
+    <string name="category_tools">Tools</string>
+    <string name="preview_network_error">Network error</string>
+    <string-array name="about_core_skills_fallback">
+        <item>Kotlin</item>
+        <item>Jetpack Compose</item>
+        <item>SwiftUI</item>
+        <item>Offline-first</item>
+        <item>Clean Architecture</item>
+        <item>Coroutines</item>
+        <item>Dagger Hilt</item>
+        <item>Room</item>
+        <item>Retrofit</item>
+    </string-array>
+    <string-array name="preview_programming_language_items">
+        <item>Kotlin</item>
+        <item>Java</item>
+        <item>Swift</item>
+        <item>SQL</item>
+    </string-array>
+    <string-array name="preview_android_items">
+        <item>Jetpack Compose</item>
+        <item>MVVM</item>
+        <item>Hilt</item>
+        <item>Coroutines</item>
+        <item>Room</item>
+        <item>Retrofit</item>
+        <item>WorkManager</item>
+        <item>RxJava</item>
+    </string-array>
+    <string-array name="preview_ios_items">
+        <item>SwiftUI</item>
+        <item>Combine</item>
+        <item>StoreKit 2</item>
+        <item>UserDefaults</item>
+    </string-array>
+    <string-array name="preview_testing_items">
+        <item>JUnit</item>
+        <item>Mockito</item>
+        <item>Unit Testing</item>
+    </string-array>
+
+    <string name="experience_freelance_current_company">Freelance Android Developer</string>
+    <string name="experience_freelance_current_role">Senior Android Developer</string>
+    <string name="experience_remote_istanbul">Remote, Istanbul / Türkiye</string>
+    <string name="experience_freelance_current_period">Oct 2025 - Jun 2026</string>
+    <string name="experience_freelance_current_summary">Developed Hemşire Tercih Asistanı as the sole Android developer in a cross-functional team, using Kotlin and Jetpack Compose with a focus on scalable architecture, business logic, and maintainable user flows.</string>
+    <string name="experience_freelance_current_stack">Kotlin • Jetpack Compose • Scalable Architecture</string>
+    <string name="experience_avsos_company">Avsos via ID3</string>
+    <string name="experience_android_developer_role">Android Developer</string>
+    <string name="experience_istanbul">Istanbul / Türkiye</string>
+    <string name="experience_avsos_period">Apr 2025 - Sep 2025</string>
+    <string name="experience_avsos_summary">Developed Flight Market, an offline in-flight sales app running on Android POS devices, and implemented complex offline sync flows.</string>
+    <string name="experience_avsos_stack">Kotlin • Jetpack Compose • Room • WorkManager • Hilt</string>
+    <string name="experience_doubletech_company">DoubleTech Studio</string>
+    <string name="experience_prague">Prague / Czech Republic</string>
+    <string name="experience_doubletech_period">Oct 2023 - Jan 2025</string>
+    <string name="experience_doubletech_summary">Developed Ehliyet Sinav Uygulamasi, a driver’s license exam app using Hilt, Coroutines and Room, published on Google Play.</string>
+    <string name="experience_doubletech_stack">Kotlin • Hilt • Coroutines • Room</string>
+    <string name="experience_rem_company">REM People</string>
+    <string name="experience_rem_period">Sep 2022 - Oct 2023</string>
+    <string name="experience_rem_summary">Refactored legacy Java modules to Kotlin while developing new features for Rem-inStore and improving reliability through JUnit and Mockito unit tests.</string>
+    <string name="experience_rem_stack">Kotlin • MVVM • Hilt • Coroutines • Retrofit • JUnit • Mockito</string>
+    <string name="experience_enerjisa_company">Enerjisa</string>
+    <string name="experience_enerjisa_period">Aug 2021 - Sep 2022</string>
+    <string name="experience_enerjisa_summary">Developed the IKon HR App, enhancing HR workflows for 1000+ employees with scalable architecture.</string>
+    <string name="experience_enerjisa_stack">MVVM • Dagger2 • DataBinding • RxJava</string>
+    <string name="experience_ipucu_company">iPucu Bilisim</string>
+    <string name="experience_kocaeli">Kocaeli / Türkiye</string>
+    <string name="experience_ipucu_period">May 2020 - Jun 2021</string>
+    <string name="experience_ipucu_summary">Contributed to ENUYGUN, FUPS, and Tatil.com Android apps using Kotlin; started as an intern and was promoted to full-time developer after two months.</string>
+    <string name="experience_ipucu_stack">Kotlin • Android • Retrofit</string>
+
+    <string name="education_czu_school">Czech University of Life Sciences Prague</string>
+    <string name="education_czu_degree">Informatics (Master)</string>
+    <string name="education_czu_period">Sep 2024 - Jan 2025</string>
+    <string name="education_czu_summary">Started the Informatics master’s program in Prague.</string>
+    <string name="education_vse_school">Prague University of Economics and Business</string>
+    <string name="education_vse_degree">English Preparatory</string>
+    <string name="education_vse_period">Sep 2023 - Jun 2024</string>
+    <string name="education_vse_summary">Completed English preparation during my study period in Prague.</string>
+    <string name="education_bilecik_school">Bilecik University</string>
+    <string name="education_bilecik_degree">Computer Engineering (Bachelor)</string>
+    <string name="education_bilecik_location">Bilecik / Türkiye</string>
+    <string name="education_bilecik_period">Sep 2016 - Jun 2020</string>
+    <string name="education_bilecik_summary">Learned core computer science fundamentals and focused on mobile development.</string>
+
+    <string name="project_ehliyet_ios_name">Ehliyet Sınavına Hazırlık 2026</string>
+    <string name="project_ehliyet_ios_description">SwiftUI exam prep app with a JSON-driven quiz engine, media-based questions, progress tracking, StoreKit 2 subscriptions, rewarded ads, and Firebase Crashlytics.</string>
+    <string name="project_sleep_name">03:17 - Stop Overthinking</string>
+    <string name="project_sleep_description">SwiftUI sleep app with StoreKit 2 purchases, Combine-based state handling, and lightweight UserDefaults persistence.</string>
+    <string name="project_cocktailist_name">Cocktailist</string>
+    <string name="project_cocktailist_description">Personal project built with Kotlin, MVVM, Hilt, Coroutines, Room, and Firebase, focused on robust data management and a seamless user experience.</string>
+    <string name="project_quickbite_name">QuickBite</string>
+    <string name="project_quickbite_description">Complete app lifecycle project with Kotlin, MVVM, Hilt, Coroutines, and Firebase Realtime DB.</string>
+    <string name="project_talknative_name">TalkNative</string>
+    <string name="project_talknative_description">Android app enabling real-time translation for multilingual texting using Yandex Translate API.</string>
+    <string-array name="project_ehliyet_ios_stack">
+        <item>SwiftUI</item>
+        <item>StoreKit 2</item>
+        <item>Firebase Crashlytics</item>
+    </string-array>
+    <string-array name="project_sleep_stack">
+        <item>SwiftUI</item>
+        <item>Combine</item>
+        <item>UserDefaults</item>
+    </string-array>
+    <string-array name="project_cocktailist_stack">
+        <item>Kotlin</item>
+        <item>MVVM</item>
+        <item>Hilt</item>
+        <item>Room</item>
+        <item>Firebase</item>
+    </string-array>
+    <string-array name="project_quickbite_stack">
+        <item>Kotlin</item>
+        <item>MVVM</item>
+        <item>Hilt</item>
+        <item>Firebase Realtime DB</item>
+    </string-array>
+    <string-array name="project_talknative_stack">
+        <item>Kotlin</item>
+        <item>MVVM</item>
+        <item>Dagger2</item>
+        <item>RxJava</item>
+        <item>Retrofit</item>
+    </string-array>
 
 </resources>
